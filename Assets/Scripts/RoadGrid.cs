@@ -12,8 +12,7 @@ class RoadGrid
         this.z = z;
     }
 
-    // TODO: Napisać to lepiej
-    public (RoadType roadType, int orientation) GetRoadForIndex(int x, int z)
+    public (RoadType, int) GetRoadForIndex(int x, int z)
     {
         (int x, int z)[] directions = new (int x, int z)[4]
         {
@@ -22,82 +21,19 @@ class RoadGrid
             (0, -1),
             (-1, 0),
         };
-        bool[] roadNeigours = new bool[4];
-        int howManyRoadNeibor = 0;
-
+        int roadIndex = 0;
+        // Convert neibors to int number in range 0-15
         for (int i = 0; i < 4; i++)
         {
             (int x, int z) newIndex = (directions[i].x + x, directions[i].z + z);
-            if (newIndex.x >=0 && newIndex.x < this.x && newIndex.z >= 0 && newIndex.z < this.z && grid[newIndex.x, newIndex.z])
+            if (newIndex.x >= 0 && newIndex.x < this.x && newIndex.z >= 0 && newIndex.z < this.z && grid[newIndex.x, newIndex.z])
             {
-                roadNeigours[i] = true;
-                howManyRoadNeibor++;
+                roadIndex += (int)Mathf.Pow(2, i);
             }
         }
-        switch (howManyRoadNeibor)
-        {
-            case 0:
-                // ???
-                    return (0, 0);
-                break;
-            case 1:
-                if (roadNeigours[0] == true || roadNeigours[2] == true)
-                {
-                    return (RoadType.Road, 0);
-                }
-                else
-                {
-                    return (RoadType.Road, 1);
-                }
-                break;
-            case 2:
-                if (roadNeigours[0] == true && roadNeigours[2] == true)
-                {
-                    return (RoadType.Road, 0);
-                }
-                else if(roadNeigours[1] == true && roadNeigours[3] == true)
-                {
-                    return (RoadType.Road, 1);
-                }
-                else if (roadNeigours[0] == true)
-                {
-                    if (roadNeigours[3] == true)
-                    {
-                        return (RoadType.Road90, 3);
-                    }
-                    else if (roadNeigours[1] == true)
-                    {
-                        return (RoadType.Road90, 0);
-                    }
-                }
-                else //if (roadNeigours[2] == true)
-                {
-                    if (roadNeigours[3] == true)
-                    {
-                        return (RoadType.Road90, 2);
-                    }
-                    else if (roadNeigours[1] == true)
-                    {
-                        return (RoadType.Road90, 1);
-                    }
-                }
-                break;
-            case 3:
-                for (int i = 0; i < 4; i++)
-                {
-                    if (roadNeigours[i] == false)
-                    {
-                        return (RoadType.RoadT, i);
-                    }
-                }
-                break;
-            case 4:
-                return (RoadType.RoadX, 0);
-                break;
-        }
-        return (0, 0);
+        // Convert this number to RoadType and orientation
+        return roadTypeConverter[roadIndex];
     }
-
     public void AddNewPath(List<Node> path)
     {
         foreach (var node in path)
@@ -105,11 +41,31 @@ class RoadGrid
             grid[(int)node.Position.x, (int)node.Position.y] = true;
         }
     }
-
+    // Well Thouthout array with fixed combination with O(1) access and less branches
+    (RoadType roadType, int rotation)[] roadTypeConverter = new (RoadType roadType, int rotation)[] 
+    { 
+        (RoadType.None   , 0),
+        (RoadType.Road   , 0),
+        (RoadType.Road   , 1),
+        (RoadType.Road90 , 0),
+        (RoadType.Road   , 0),
+        (RoadType.Road   , 0),
+        (RoadType.Road90 , 1),
+        (RoadType.RoadT  , 3),
+        (RoadType.Road   , 1),
+        (RoadType.Road90 , 3),
+        (RoadType.Road   , 1),
+        (RoadType.RoadT  , 2),
+        (RoadType.Road90 , 2),
+        (RoadType.RoadT  , 1),
+        (RoadType.RoadT  , 0),
+        (RoadType.RoadX  , 0),
+    };
 }
 
 enum RoadType
 {
+    None,
     Road,
     Road90,
     RoadT,

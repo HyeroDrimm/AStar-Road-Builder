@@ -24,8 +24,6 @@ public class GameController : MonoBehaviour
     private bool firtstChosen;
     private int fz, fx, sx, sz;
 
-
-
     private void Start()
     {
         floorTiles = new FloorTile[xFloorSize, zFloorSize];
@@ -81,7 +79,8 @@ public class GameController : MonoBehaviour
                 int x = (int)node.Position.x;
                 int z = (int)node.Position.y;
                 (RoadType roadType, int rotation) = roadGrid.GetRoadForIndex(x, z);
-                floorTiles[x, z].SpawnRoadTile(RoadTiles[(int)roadType], rotation);
+                if (roadType != RoadType.None)
+                    floorTiles[x, z].SpawnRoadTile(RoadTiles[(int)roadType-1], rotation);
             }
         }
     }
