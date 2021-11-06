@@ -74,13 +74,36 @@ public class GameController : MonoBehaviour
         void AddNewPath(List<Node> path)
         {
             roadGrid.AddNewPath(path);
+
+            HashSet<Node> pathWithNeighbours = AddPathNeighbours(path);
+            UpdateRoads(pathWithNeighbours);
+        }
+
+        HashSet<Node> AddPathNeighbours(List<Node> path)
+        {
+            HashSet<Node> result = new HashSet<Node>();
+            foreach (var node in path)
+            {
+                result.Add(node);
+                foreach (var neigbour in map.Neighbours(node))
+                {
+                    result.Add(neigbour);
+                }
+            }
+            return result;
+        }
+        
+        void UpdateRoads(HashSet<Node> path)
+        {
             foreach (var node in path)
             {
                 int x = (int)node.Position.x;
                 int z = (int)node.Position.y;
                 (RoadType roadType, int rotation) = roadGrid.GetRoadForIndex(x, z);
                 if (roadType != RoadType.None)
-                    floorTiles[x, z].SpawnRoadTile(RoadTiles[(int)roadType-1], rotation);
+                {
+                    floorTiles[x, z].SpawnRoadTile(RoadTiles[(int)roadType - 1], rotation);
+                }
             }
         }
     }

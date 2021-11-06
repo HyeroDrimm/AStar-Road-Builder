@@ -14,15 +14,19 @@ class RoadGrid
 
     public (RoadType, int) GetRoadForIndex(int x, int z)
     {
+        if (grid[x, z] == false)
+            return (RoadType.None, 0);
+
+        
         (int x, int z)[] directions = new (int x, int z)[4]
         {
-            (0, 1),
-            (1, 0),
-            (0, -1),
-            (-1, 0),
+            ( 0,  1),
+            ( 1,  0),
+            ( 0, -1),
+            (-1,  0),
         };
         int roadIndex = 0;
-        // Convert neibors to int number in range 0-15
+        // Convert neighbours to int number in range 0-15
         for (int i = 0; i < 4; i++)
         {
             (int x, int z) newIndex = (directions[i].x + x, directions[i].z + z);

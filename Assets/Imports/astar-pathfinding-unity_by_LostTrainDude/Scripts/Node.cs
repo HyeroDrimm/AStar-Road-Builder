@@ -10,6 +10,10 @@ public class Node : IComparable<Node>
     {
         Position = new Vector2(x, y);
     }
+    public Node(Vector2 position)
+    {
+        Position = position;
+    }
 
     public int CompareTo(Node other)
     {
