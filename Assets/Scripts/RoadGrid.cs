@@ -26,7 +26,7 @@ class RoadGrid
             (-1,  0),
         };
         int roadIndex = 0;
-        // Convert neighbours to int number in range 0-15
+        // Convert neighbour bools to int number in range 0-15
         for (int i = 0; i < 4; i++)
         {
             (int x, int z) newIndex = (directions[i].x + x, directions[i].z + z);
@@ -45,24 +45,24 @@ class RoadGrid
             grid[(int)node.Position.x, (int)node.Position.y] = true;
         }
     }
-    // Well Thouthout array with fixed combination with O(1) access and less branches
+    // Well Thout hout array with fixed combinations
     (RoadType roadType, int rotation)[] roadTypeConverter = new (RoadType roadType, int rotation)[] 
     { 
         (RoadType.None   , 0),
         (RoadType.Road   , 0),
         (RoadType.Road   , 1),
-        (RoadType.Road90 , 0),
-        (RoadType.Road   , 0),
-        (RoadType.Road   , 0),
         (RoadType.Road90 , 1),
-        (RoadType.RoadT  , 3),
-        (RoadType.Road   , 1),
-        (RoadType.Road90 , 3),
-        (RoadType.Road   , 1),
-        (RoadType.RoadT  , 2),
+        (RoadType.Road   , 0),
+        (RoadType.Road   , 0),
         (RoadType.Road90 , 2),
         (RoadType.RoadT  , 1),
+        (RoadType.Road   , 1),
+        (RoadType.Road90 , 0),
+        (RoadType.Road   , 1),
         (RoadType.RoadT  , 0),
+        (RoadType.Road90 , 3),
+        (RoadType.RoadT  , 3),
+        (RoadType.RoadT  , 2),
         (RoadType.RoadX  , 0),
     };
 }
