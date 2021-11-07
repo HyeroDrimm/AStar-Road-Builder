@@ -346,17 +346,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81e1195b1f53e7f4f8cdedd9e12fe1cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floorTilePrefab: {fileID: 3739168041930208484, guid: 9abbe58b80b5c1c46984da2bc9a43d45, type: 3}
-  floorTileHolder: {fileID: 1331399703}
   xFloorSize: 8
   zFloorSize: 8
+  buildings:
+  - {x: 5, y: 6}
+  - {x: 5, y: 7}
+  - {x: 2, y: 3}
+  - {x: 1, y: 2}
+  - {x: 6, y: 1}
+  floorTilePrefab: {fileID: 3739168041930208484, guid: 9abbe58b80b5c1c46984da2bc9a43d45, type: 3}
+  floorTileHolder: {fileID: 1331399703}
   yellowMaterial: {fileID: 2100000, guid: aa95618062dfc1f43b9bca7632215f8e, type: 2}
   grayMaterial: {fileID: 2100000, guid: 73402a3be64bb3f4d84a27eab66b1f28, type: 2}
   RoadTiles:
   - {fileID: 4601278385265313920, guid: e9c2a0e1a089c734a817d255c81d4cfa, type: 3}
-  - {fileID: 4841300644787152368, guid: c774b22c1b8187b4c90f8be6a815e479, type: 3}
-  - {fileID: 7378268596801140344, guid: 3d56bc45d9c7d29469e68becc9897742, type: 3}
+  - {fileID: 2241961739829079998, guid: c774b22c1b8187b4c90f8be6a815e479, type: 3}
+  - {fileID: 2537356056063254451, guid: 3d56bc45d9c7d29469e68becc9897742, type: 3}
   - {fileID: 182171129502126216, guid: 1460a10fed3cbad4a95cb68c41c425e7, type: 3}
+  buildingPrefab: {fileID: 434671243489238057, guid: 3527f37256ad99e4283dc73fa623250d, type: 3}
 --- !u!4 &1324583897
 Transform:
   m_ObjectHideFlags: 0

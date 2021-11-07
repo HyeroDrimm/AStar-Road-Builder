@@ -4,30 +4,33 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private GameObject floorTilePrefab;
-    [SerializeField] private Transform floorTileHolder;
     [SerializeField] private int xFloorSize = 8;
     [SerializeField] private int zFloorSize = 8;
+    [SerializeField] private List<Vector2> buildings;
 
     private Camera cam;
 
+    [SerializeField] private GameObject floorTilePrefab;
+    [SerializeField] private Transform floorTileHolder;
     [SerializeField] private Material yellowMaterial;
     [SerializeField] private Material grayMaterial;
 
     [SerializeField] private GameObject[] RoadTiles = new GameObject[4];
+    [SerializeField] private GameObject buildingPrefab;
 
     private GridGraph map;
     private RoadGrid roadGrid;
     private FloorTile[,] floorTiles;
 
-    // TEMP
     private bool firtstChosen;
-    private int fz, fx, sx, sz;
+    private (int x, int z) firstPick;
+    private (int x, int z) secondPick;
 
     private void Start()
     {
         floorTiles = new FloorTile[xFloorSize, zFloorSize];
         map = new GridGraph(xFloorSize, zFloorSize);
+        map.Walls = buildings;
         roadGrid = new RoadGrid(xFloorSize, zFloorSize);
         // Generating Visaul grid
         for (int x = 0; x < xFloorSize; x++)
@@ -45,6 +48,11 @@ public class GameController : MonoBehaviour
                     floorTile.GetComponent<MeshRenderer>().material = grayMaterial;
             }
         }
+        foreach (var building in buildings)
+        {
+            Instantiate(buildingPrefab, floorTiles[(int)building.x, (int)building.y].transform);
+            floorTiles[(int)building.x, (int)building.y].GetComponent<MeshCollider>().enabled = false;
+        }
 
         cam = Camera.main;
     }
@@ -56,25 +64,23 @@ public class GameController : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(cam.ScreenPointToRay(Input.mousePosition), out hit) && hit.transform.CompareTag("FloorTile"))
             {
+                FloorTile choosenFloorTile = hit.transform.GetComponent<FloorTile>();
                 if (!firtstChosen)
                 {
-                    fx = hit.transform.GetComponent<FloorTile>().x;
-                    fz = hit.transform.GetComponent<FloorTile>().z;
+                    firstPick = (choosenFloorTile.x, choosenFloorTile.z);
                     firtstChosen = true;
                 }
                 else
                 {
-                    sx = hit.transform.GetComponent<FloorTile>().x;
-                    sz = hit.transform.GetComponent<FloorTile>().z;
+                    secondPick = (choosenFloorTile.x, choosenFloorTile.z);
                     firtstChosen = false;
-                    AddNewPath(AStar.Search(map, map.Grid[sx, sz], map.Grid[fx, fz]));
+                    AddNewPath(AStar.Search(map, map.Grid[firstPick.x, firstPick.z], map.Grid[secondPick.x, secondPick.z]));
                 }
             }
         }
         void AddNewPath(List<Node> path)
         {
             roadGrid.AddNewPath(path);
-
             HashSet<Node> pathWithNeighbours = AddPathNeighbours(path);
             UpdateRoads(pathWithNeighbours);
         }
